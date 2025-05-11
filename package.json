@@ -1,0 +1,17 @@
+{
+  "name": "project_chimera",
+  "version": "1.0.0",
+  "description": "Cognitive Heuristic Interface & Multitasking Environment",
+  "scripts": {
+    "start": "parcel Chimera_Interface.html --open",
+    "build:parcel": "parcel build Chimera_Interface.html --dist-dir dist --public-url ./ --no-source-maps",
+    "build": "npm run build:parcel && node inline-assets.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Mathew Pittard",
+  "license": "ISC",
+  "devDependencies": {
+    "parcel": "^2.11.0"
+  }
+}

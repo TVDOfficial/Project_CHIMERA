@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project CHIMERA Interface</title>
+    <link rel="icon" type="image/x-icon" href="images/favicon.ico">
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/widgets.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <!-- tsParticles -->
+    <script src="https://cdn.jsdelivr.net/npm/tsparticles@2/tsparticles.bundle.min.js"></script>
+</head>
+<body>
+    <div id="dynamic-background-container">
+        <div class="background-overlay-pattern"></div>
+    </div>
+
+    <div class="startup-overlay active" id="startupOverlay">
+        <div class="startup-content">
+            <div class="startup-logo-chimera">
+                <img src="images/logo.png" alt="Chimera Logo" />
+            </div>
+            <h1 class="startup-title-chimera">CHIMERA OS</h1>
+            <p class="startup-subtitle-chimera">Cognitive Heuristic Interface & Multitasking Environment</p>
+            <div class="startup-progress-bar">
+                <div class="startup-progress-fill" id="startupProgressFill"></div>
+            </div>
+            <div class="startup-status-text" id="startupStatusText">INITIALIZING CORE SYSTEMS...</div>
+        </div>
+    </div>
+
+    <main class="dashboard-grid" id="dashboardGrid">
+        <!-- Widgets will be dynamically rendered here -->
+    </main>
+
+    <!-- Settings Modal -->
+    <div class="settings-modal-chimera" id="settingsModal">
+        <div class="settings-modal-content">
+            <header class="settings-modal-header">
+                <h2><i class="fas fa-cogs"></i> System Configuration</h2>
+                <button class="settings-modal-close-btn" id="closeSettingsModalBtn">×</button>
+            </header>
+            <section class="settings-modal-body">
+                <div class="settings-tab-nav">
+                    <button class="settings-tab-btn active" data-tab="general">General</button>
+                    <button class="settings-tab-btn" data-tab="display">Display</button>
+                    <button class="settings-tab-btn" data-tab="apikeys">API Keys & URLs</button>
+                    <button class="settings-tab-btn" data-tab="widgets">Widget Settings</button>
+                    <button class="settings-tab-btn" data-tab="actions">Actions</button>
+                </div>
+
+                <div class="settings-tab-content active" data-tab-content="general">
+                    <h4><i class="fas fa-palette"></i> Appearance</h4>
+                    <div class="setting-item">
+                        <label for="themeSelector">Interface Theme:</label>
+                        <select id="themeSelector">
+                            <option value="chimera-dark">Chimera Dark (Default)</option>
+                            <option value="chimera-light">Chimera Light</option>
+                            <option value="cyber-blue">Cyber Blue</option>
+                        </select>
+                    </div>
+                     <div class="setting-item">
+                        <label for="backgroundParticlesToggle" class="checkbox-label">
+                            Enable Background Particles:
+                            <input type="checkbox" id="backgroundParticlesToggle">
+                        </label>
+                    </div>
+                </div>
+
+                <div class="settings-tab-content" data-tab-content="display">
+                    <h4><i class="fas fa-desktop"></i> Layout & Widgets</h4>
+                    <div class="setting-item">
+                        <label>Dashboard Layout Mode:</label>
+                        <div class="radio-group">
+                            <input type="radio" id="layoutGrid" name="layoutMode" value="grid">
+                            <label for="layoutGrid">Grid Mode</label>
+                            <input type="radio" id="layoutFreeform" name="layoutMode" value="freeform" checked>
+                            <label for="layoutFreeform">Freeform Mode</label>
+                        </div>
+                    </div>
+                    <div class="setting-item">
+                        <button class="btn-secondary" id="openWidgetLibraryBtn"><i class="fas fa-th-large"></i> Manage Widgets</button>
+                    </div>
+                </div>
+
+                <div class="settings-tab-content" data-tab-content="apikeys">
+                    <h4><i class="fas fa-key"></i> API Keys & Feed URLs</h4>
+                    <div class="setting-item">
+                        <label for="weatherApiKeyInput">OpenWeatherMap API Key:</label>
+                        <input type="text" id="weatherApiKeyInput" placeholder="Enter your OpenWeatherMap API key">
+                    </div>
+                    <div class="setting-item">
+                        <label for="youtubeApiKeyInput">YouTube Data API Key (Optional for Search):</label>
+                        <input type="text" id="youtubeApiKeyInput" placeholder="Enter your YouTube API key">
+                    </div>
+                    <div class="setting-item">
+                        <label for="openaiApiKeyInput">OpenAI API Key (for CHIMERA AI Chat):</label>
+                        <input type="password" id="openaiApiKeyInput" placeholder="Enter your OpenAI API key (sk-...)">
+                        <p class="api-key-note">Key stored locally. Usage billed to your OpenAI account.</p>
+                    </div>
+                    <p class="api-key-note">API keys are stored locally in your browser.</p>
+                </div>
+
+                <div class="settings-tab-content" data-tab-content="widgets">
+                    <h4><i class="fas fa-puzzle-piece"></i> Widget Specific Settings</h4>
+                     <div class="setting-item">
+                        <label for="weatherLocationInput">Weather Location (City Name):</label>
+                        <input type="text" id="weatherLocationInput" placeholder="e.g., London (blank for auto-detect)">
+                    </div>
+                    <div class="setting-item">
+                        <label>Weather Units:</label>
+                        <div class="radio-group">
+                            <input type="radio" id="weatherUnitMetric" name="weatherUnit" value="metric" checked>
+                            <label for="weatherUnitMetric">Celsius</label>
+                            <input type="radio" id="weatherUnitImperial" name="weatherUnit" value="imperial">
+                            <label for="weatherUnitImperial">Fahrenheit</label>
+                        </div>
+                    </div>
+                     <div class="setting-item">
+                        <label for="rssFeedUrlInput">RSS Feed URL (for Newsfeed):</label>
+                        <input type="url" id="rssFeedUrlInput" placeholder="e.g., https://feeds.bbci.co.uk/news/world/rss.xml">
+                        <p class="api-key-note">Ensure feed server allows cross-origin requests or use a proxy.</p>
+                    </div>
+                     <div class="setting-item">
+                        <label for="rssItemCountInput">Newsfeed Item Count:</label>
+                        <input type="number" id="rssItemCountInput" min="1" max="15" value="5">
+                    </div>
+                     <div class="setting-item">
+                        <label for="aiChatTTS" class="checkbox-label">
+                            Enable CHIMERA AI Voice Output (TTS):
+                            <input type="checkbox" id="aiChatTTS">
+                        </label>
+                    </div>
+                    <div class="setting-item">
+                        <label for="stocksTrackListInput">Stocks/Crypto Watchlist (Symbol,Display Name - one per line):</label>
+                        <textarea id="stocksTrackListInput" rows="4" placeholder="Example:\nNASDAQ:AAPL,Apple Inc.\nBINANCE:BTCUSDT,Bitcoin\nFX_IDC:EURUSD,EUR/USD"></textarea>
+                        <p class="api-key-note">Enter TradingView symbols. Format: <code>SYMBOL,DisplayName</code>. Find symbols on TradingView.</p>
+                    </div>
+                </div>
+
+                 <div class="settings-tab-content" data-tab-content="actions">
+                    <h4><i class="fas fa-undo-alt"></i> System Actions</h4>
+                    <div class="setting-item">
+                         <button class="btn-danger" id="settingsResetLayoutBtn"><i class="fas fa-redo"></i> Reset Dashboard Layout</button>
+                         <p class="setting-note">Resets widget positions, visibility, and layout mode to default.</p>
+                    </div>
+                </div>
+            </section>
+            <footer class="settings-modal-footer">
+                <button class="btn-primary" id="saveSettingsBtn">Apply & Save</button>
+            </footer>
+        </div>
+    </div>
+
+    <!-- Widget Library Modal -->
+    <div class="widget-library-modal-chimera" id="widgetLibraryModal">
+        <div class="widget-library-content">
+            <header class="widget-library-header">
+                <h2><i class="fas fa-puzzle-piece"></i> Widget Library</h2>
+                <button class="widget-library-close-btn" id="closeWidgetLibraryBtn">×</button>
+            </header>
+            <section class="widget-library-body" id="widgetLibraryContainer"></section>
+             <footer class="widget-library-footer">
+                <p>Click a widget to toggle its visibility on the dashboard.</p>
+            </footer>
+        </div>
+    </div>
+
+    <!-- Custom Context Menu -->
+    <div id="customContextMenu" class="custom-context-menu">
+        <ul>
+            <li data-action="open-settings-context"><i class="fas fa-cogs"></i> Open Settings</li>
+            <li data-action="open-widget-library-context"><i class="fas fa-th-large"></i> Manage Widgets</li>
+            <li data-action="toggle-layout-mode-context"><i class="fas fa-exchange-alt"></i> Toggle Layout Mode</li>
+            <li data-action="reset-layout-context"><i class="fas fa-undo-alt"></i> Reset Layout</li>
+            <li data-action="open-info-context"><i class="fas fa-info-circle"></i> How To & Info</li>
+        </ul>
+    </div>
+
+    <!-- Info Button -->
+    <button id="infoButton" class="fab-info-btn" title="Information & How-to">
+        <i class="fas fa-question-circle"></i>
+    </button>
+
+    <!-- Info Modal -->
+    <div class="info-modal-chimera" id="infoModal">
+        <div class="info-modal-content">
+            <header class="info-modal-header">
+                <h2><i class="fas fa-info-circle"></i> Project CHIMERA - How To & Info</h2>
+                <button class="info-modal-close-btn" id="closeInfoModalBtn">×</button>
+            </header>
+            <section class="info-modal-body">
+                <h4>Welcome to CHIMERA OS!</h4>
+                <p>This is your Cognitive Heuristic Interface & Multitasking Environment.</p>
+                
+                <h4>Dashboard Interaction:</h4>
+                <ul>
+                    <li><strong>Layout Modes:</strong> Switch between 'Grid' and 'Freeform' layouts via Settings or the context menu (right-click on dashboard).
+                        <ul>
+                            <li><strong>Freeform Mode (Default):</strong> Widgets can be freely moved and resized.
+                                <ul>
+                                    <li><strong>Move:</strong> Click and drag a widget by its header.</li>
+                                    <li><strong>Resize:</strong> Drag the corner handles of a widget.</li>
+                                </ul>
+                            </li>
+                            <li><strong>Grid Mode:</strong> Widgets are arranged in columns. You can reorder them in settings (future feature) or by managing visibility.</li>
+                        </ul>
+                    </li>
+                    <li><strong>Widget Controls:</strong> Each widget has controls in its header (top-right):
+                        <ul>
+                            <li><i class="fas fa-sync-alt"></i> Refresh: Reloads widget content (if applicable). CHIMERA AI Chat: Clears chat.</li>
+                            <li><i class="fas fa-times-circle"></i> Hide: Removes the widget from the dashboard.</li>
+                        </ul>
+                    </li>
+                    <li><strong>Context Menu:</strong> Right-click anywhere on the dashboard background for quick actions:
+                        <ul>
+                            <li>Open Settings</li>
+                            <li>Manage Widgets</li>
+                            <li>Toggle Layout Mode</li>
+                            <li>Reset Layout</li>
+                            <li>How To & Info</li>
+                        </ul>
+                    </li>
+                </ul>
+    
+                <h4>System Configuration (Settings <i class="fas fa-cogs"></i>):</h4>
+                <p>Access via the "Config" button in Nav Matrix, the context menu, or the "Open Settings" button in the Display tab of settings itself.</p>
+                <ul>
+                    <li><strong>General:</strong> Change interface themes and toggle background particle effects.</li>
+                    <li><strong>Display:</strong> Switch layout mode, manage widget visibility via "Manage Widgets" button.</li>
+                    <li><strong>API Keys & URLs:</strong> Enter your API keys for services like OpenWeatherMap, YouTube (for search), OpenAI (for CHIMERA AI Chat), and set your RSS feed URL. Keys are stored locally in your browser.</li>
+                    <li><strong>Widget Settings:</strong> Configure specific options for Weather (location, units), Newsfeed (item count), and CHIMERA AI Chat (toggle voice output).</li>
+                    <li><strong>Actions:</strong> Reset dashboard layout to its default state.</li>
+                </ul>
+                
+                <h4>Widget Library:</h4>
+                <p>Access via "Manage Widgets" in Settings or the context menu. Click on a widget card to toggle its visibility on the dashboard.</p>
+
+                <h4>CHIMERA AI Chat (<i class="fas fa-robot"></i>):</h4>
+                <ul>
+                    <li><strong>Voice Input:</strong> Click the <i class="fas fa-microphone"></i> button to dictate your message (browser permission required).</li>
+                    <li><strong>Voice Output:</strong> AI responses can be spoken aloud. Toggle this in Settings > Widget Settings.</li>
+                    <li><strong>Persona:</strong> CHIMERA AI has a built-in persona to assist you as part of the CHIMERA OS.</li>
+                </ul>
+    
+                <h4>Developer Information:</h4>
+                <p>
+                    Developed by: Mathew Pittard<br>
+                    Email: <a href="mailto:Pepper1848@hotmail.com">Pepper1848@hotmail.com</a><br>
+                    GitHub: <a href="https://github.com/TVDOfficial/Project_CHIMERA" target="_blank">TVDOfficial/Project_CHIMERA</a>
+                </p>
+                <p class="info-note">CHIMERA OS is a dynamic interface concept. Explore and customize!</p>
+            </section>
+        </div>
+    </div>
+
+    <!-- Widget Specific Settings Modal -->
+    <div class="settings-modal-chimera widget-specific-settings-modal" id="widgetSpecificSettingsModal">
+        <div class="settings-modal-content small"> <!-- Added 'small' class for potentially smaller modal -->
+            <header class="settings-modal-header">
+                <h2 id="widgetSpecificSettingsTitle"><i class="fas fa-cog"></i> Widget Settings</h2>
+                <button class="settings-modal-close-btn" id="closeWidgetSpecificSettingsModalBtn">×</button>
+            </header>
+            <section class="settings-modal-body" id="widgetSpecificSettingsBody">
+                <!-- Dynamically populated content -->
+            </section>
+            <footer class="settings-modal-footer">
+                <button class="btn-secondary" id="cancelWidgetSpecificSettingsBtn">Cancel</button>
+                <button class="btn-primary" id="saveWidgetSpecificSettingsBtn">Apply & Save</button>
+            </footer>
+        </div>
+    </div>
+
+    <script type="module" src="js/main.js"></script>
+</body>
+</html>

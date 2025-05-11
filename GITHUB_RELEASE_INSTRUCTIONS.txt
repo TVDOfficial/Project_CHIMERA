@@ -1,0 +1,65 @@
+===================================================
+Project CHIMERA - GitHub Release Checklist
+===================================================
+
+After a successful build using `build_project.bat` (output in the 'dist' folder):
+
+1.  **Update Version (if applicable):**
+    *   Open `package.json`.
+    *   Manually update the "version" field (e.g., from "1.0.0" to "1.0.1" or "1.1.0").
+    *   Save `package.json`.
+
+2.  **Commit Changes to Git:**
+    *   Open your Git terminal/client in the project root.
+    *   Stage all your changes:
+        git add .
+    *   Commit the changes with a descriptive message (include the new version if you updated it):
+        git commit -m "Prepare for release vX.X.X" 
+        (Replace X.X.X with the actual version number from package.json)
+
+3.  **Push Code Changes to GitHub:**
+    *   Push your commits to your remote repository (usually 'origin' and 'main' or 'master' branch):
+        git push origin main
+
+4.  **Create a Git Tag for the Version:**
+    *   Tags mark specific points in your repository's history as important, typically for releases.
+    *   Create an annotated tag (recommended):
+        git tag -a vX.X.X -m "Release version X.X.X"
+        (Replace X.X.X with the version number, e.g., v1.0.1)
+    *   Or a lightweight tag:
+        git tag vX.X.X
+
+5.  **Push the Tag to GitHub:**
+    *   By default, `git push` doesn't push tags. You need to do it explicitly:
+        git push origin vX.X.X
+        (Or to push all local tags: `git push origin --tags`)
+
+6.  **Create the Release on GitHub:**
+    *   Go to your GitHub repository page in your web browser.
+    *   Click on the "Releases" tab (or find "Create a new release" on the main repo page).
+    *   Click "Draft a new release".
+    *   **Choose a tag:** Select the tag you just pushed (e.g., `vX.X.X`).
+    *   **Release title:** Enter a title, often the same as the tag (e.g., `Project CHIMERA vX.X.X`).
+    *   **Describe this release:** Write a summary of the changes, new features, and bug fixes included in this version. You can use Markdown. Refer to your commit messages.
+    *   **Attach binaries:**
+        *   Locate the `dist` folder in your project.
+        *   Create a ZIP archive of the *entire contents* of the `dist` folder. Name it something like `Project_CHIMERA-vX.X.X.zip`.
+        *   Drag and drop this ZIP file into the "Attach binaries by dropping them here or selecting them" area on the GitHub release page.
+    *   **Pre-release:** Check this box if this is a beta, alpha, or release candidate version. Uncheck for stable releases.
+    *   **Publish release:** Click this button.
+
+Your users can now download the ZIP file containing the ready-to-run application from your GitHub Releases page. Update your main `README.md` to point users to the "Releases" page for the easiest way to get the application.
+
+
+===========================================================================
+Go to Your GitHub Repository.
+Navigate to the "Releases" Tab: On the right side of the code tab, you'll usually see a "Releases" link. Click it. (If you don't have any releases yet, it might say "Create a new release" or similar on the main repo page).
+Click "Draft a new release" (or "Create a new release").
+"Choose a tag" Dropdown:
+Type your new tag name: In the input box for "Choose a tag," type the desired tag name (e.g., v1.0.0, v1.0.1-beta).
+Click "Create new tag: [your-tag-name] on publish": If the tag doesn't exist, GitHub will offer to create it for you when you publish the release.
+(Optional) Target: By default, the tag will be created on the latest commit of your default branch (e.g., main or master). You can click the "Target" dropdown next to it to choose a different branch or a specific commit hash if needed.
+Fill in the rest of the release details: Release title, description, attach binaries (your dist folder ZIP).
+Click "Publish release".
+When you publish the release, GitHub will automatically create the tag you specified and associate it with the commit you targeted (or the latest commit on the default branch).
+===========================================================================

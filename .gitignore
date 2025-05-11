@@ -1,0 +1,7 @@
+# .gitignore
+node_modules/
+.parcel-cache/
+dist/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
