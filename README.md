@@ -9,7 +9,7 @@ Welcome to Project CHIMERA, a dynamic and customizable dashboard interface desig
 *   **Customizable Dashboard:** Arrange and display various widgets to suit your needs.
 *   **Multiple Layout Modes:**
     *   **Freeform Mode (Default):** Freely move and resize widgets on the dashboard.
-    *   **Grid Mode:** Organizes widgets into a structured column-based layout.
+    *   **Grid Mode:** Organizes widgets into a structured 4-column layout. Widgets can be dragged and dropped between columns and reordered within columns.
 *   **Variety of Widgets:**
     *   Clock Display
     *   Enviro-Scan (Weather)
@@ -20,6 +20,7 @@ Welcome to Project CHIMERA, a dynamic and customizable dashboard interface desig
     *   Latin Proverb
     *   Nav Matrix (Quick Links)
     *   Audio Relay (Spotify Player)
+    *   Dynamic Updates Widget (Loads configurable content from a remote JSON file)
     *   CHIMERA AI Chat (OpenAI Integration with Voice Input/Output)
     *   System Core (Mock system stats)
     *   Directives (Task List)
@@ -28,10 +29,12 @@ Welcome to Project CHIMERA, a dynamic and customizable dashboard interface desig
     *   Retro Snake Game
     *   Connection Monitor
 *   **Theming:** Choose from multiple visual themes (Chimera Dark, Chimera Light, Cyber Blue).
+*   **Application Update Banner:** Notifies users of new application versions with a download link.
 *   **Background Effects:** Toggle subtle background particle animations.
 *   **API Integration:** Supports OpenWeatherMap, YouTube Data API (for search), and OpenAI API.
 *   **Local Storage:** Settings, widget configurations, and some widget data (like notes, tasks, chat history) are saved locally in your browser.
 *   **Context Menu & Info Panel:** Easy access to settings, widget management, and help.
+*   **Enhanced Reset Options:** Differentiates between a full factory reset (clearing all settings and layout) and a layout-only reset via the context menu.
 
 ## For Users (Running the Interface)
 
