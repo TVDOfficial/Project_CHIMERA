@@ -22,6 +22,7 @@ import { setupChimeraAIChatWidget } from './widgets/chimeraAIChatWidget.js';
 import { setupRssFeedWidget } from './widgets/rssFeedWidget.js';
 import { setupLatinProverbsWidget } from './widgets/latinProverbsWidget.js';
 import { setupStocksWidget } from './widgets/stocksWidget.js';
+import { setupUpdatesWidget } from './widgets/updatesWidget.js';
 
 // --- Global Variables ---
 const STORAGE_PREFIX = 'chimeraOS_v2.6_'; // Ensure this matches your latest version
@@ -114,6 +115,7 @@ function mapWidgetSetupFunctions() {
     if (ALL_WIDGET_DEFINITIONS.rssFeedWidget) ALL_WIDGET_DEFINITIONS.rssFeedWidget.initFunc = setupRssFeedWidget;
     if (ALL_WIDGET_DEFINITIONS.latinProverbsWidget) ALL_WIDGET_DEFINITIONS.latinProverbsWidget.initFunc = setupLatinProverbsWidget;
     if (ALL_WIDGET_DEFINITIONS.stocksWidget) ALL_WIDGET_DEFINITIONS.stocksWidget.initFunc = setupStocksWidget;
+    if (ALL_WIDGET_DEFINITIONS.updatesWidget) ALL_WIDGET_DEFINITIONS.updatesWidget.initFunc = setupUpdatesWidget;
 }
 
 
@@ -479,6 +481,7 @@ function renderDashboardWidgets() {
                             else if (conf.id === 'rssFeedWidget') def.initFunc(el, conf, settings, escapeHTML);
                             else if (conf.id === 'latinProverbsWidget') def.initFunc(el, conf, settings, escapeHTML);
                             else if (conf.id === 'stocksWidget') def.initFunc(el, conf, settings, escapeHTML);
+                            else if (conf.id === 'updatesWidget') def.initFunc(el, conf, settings, escapeHTML);
                             else def.initFunc(el, conf, settings); // Default pass settings
                         } catch (e) { console.error(`Init error ${conf.id}:`, e); }
                     }
@@ -506,6 +509,7 @@ function renderDashboardWidgets() {
                         else if (conf.id === 'rssFeedWidget') def.initFunc(el, conf, settings, escapeHTML);
                         else if (conf.id === 'latinProverbsWidget') def.initFunc(el, conf, settings, escapeHTML);
                         else if (conf.id === 'stocksWidget') def.initFunc(el, conf, settings, escapeHTML);
+                        else if (conf.id === 'updatesWidget') def.initFunc(el, conf, settings, escapeHTML);
                         else def.initFunc(el, conf, settings); // Default pass settings
                     } catch (e) { console.error(`Init error ${conf.id}:`, e); }
                 }
@@ -523,7 +527,7 @@ function createWidgetElement(widgetConfig) {
     const el = document.createElement('article'); el.className = `widget ${def.id}-chimera`; el.id = def.id; el.dataset.widgetKey = def.id;
 
     let showRefresh = !['timeWidget', 'quickLinksWidget', 'calendarWidget'].includes(def.id);
-    if (['nexusVisualizerWidget', 'snakeGameWidget', 'connectionMonitorWidget', 'rssFeedWidget', 'weatherWidget', 'systemWidget', 'spotifyWidget', 'youtubeWidget', 'chimeraAIChatWidget', 'latinProverbsWidget', 'stocksWidget'].includes(def.id)) showRefresh = true; // latinProverbsWidget can be refreshed, stocksWidget uses TradingView (less need for manual refresh)
+    if (['nexusVisualizerWidget', 'snakeGameWidget', 'connectionMonitorWidget', 'rssFeedWidget', 'weatherWidget', 'systemWidget', 'spotifyWidget', 'youtubeWidget', 'chimeraAIChatWidget', 'latinProverbsWidget', 'stocksWidget', 'updatesWidget'].includes(def.id)) showRefresh = true; // latinProverbsWidget can be refreshed, stocksWidget uses TradingView (less need for manual refresh)
 
     const hasSpecificSettings = def.configurableSettings && def.configurableSettings.length > 0;
     const specificSettingsBtnHtml = hasSpecificSettings ? `<button class="widget-btn widget-specific-settings-btn" data-widget-key="${def.id}" title="Widget Settings"><i class="fas fa-cog"></i></button>` : '';
@@ -578,7 +582,7 @@ function createWidgetElement(widgetConfig) {
         el.style.minHeight = `${def.minH}px`;
 
         if (def.id === 'spotifyWidget') el.style.height = widgetConfig.height || '190px';
-        else if (['nexusVisualizerWidget', 'snakeGameWidget', 'chimeraAIChatWidget', 'rssFeedWidget'].includes(def.id)) {
+        else if (['nexusVisualizerWidget', 'snakeGameWidget', 'chimeraAIChatWidget', 'rssFeedWidget', 'updatesWidget'].includes(def.id)) {
              el.style.height = widgetConfig.height || `${def.minH + 60}px`;
         } else {
             el.style.height = 'auto';

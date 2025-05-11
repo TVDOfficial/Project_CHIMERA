@@ -6,19 +6,14 @@
     "widgetType": "announcement",
   
     "widgetConfig": {
-      "_comment_announcement": "Use for simple text announcements. 'title' is optional.",
-      "title": "🎉 Welcome to the Dynamic Updates Widget!",
-      "message": "This content is loaded from the updates.json file on GitHub. Edit this file to change what's displayed here. You can try setting widgetType to 'spotifyEmbed' (and provide an embedUrl), 'htmlContent' (and provide an html string), or 'image' (and provide an imageUrl).",
-  
-      "_comment_spotifyEmbed": "To use Spotify: change widgetType to 'spotifyEmbed' and provide your Spotify embed URL for the 'embedUrl' key. Remove the '_example' from the key name.",
-      "embedUrl_spotify_example": "https://open.spotify.com/embed/playlist/37i9dQZF1DXcBWIGoYBM5M?utm_source=generator",
-  
-      "_comment_htmlContent": "To use custom HTML: change widgetType to 'htmlContent' and provide your HTML code as a string for the 'html' key. Be careful with complex HTML. Remove the '_example' from the key name.",
-      "html_example": "<div style='padding:10px; background-color:#282c34; color: #61dafb; border-radius:5px;'><h3 style='margin-top:0;'>Custom HTML Content!</h3><p>This is <strong>bold</strong> and this is <em>italic</em>. You can embed various HTML structures.</p><button onclick='alert(\"HTML button clicked!\")'>Click me</button></div>",
-  
-      "_comment_image": "To use an image: change widgetType to 'image' and provide the image URL for 'imageUrl'. 'altText' and 'linkUrl' (to make the image clickable) are optional. Remove the '_example' from the key names.",
-      "imageUrl_example": "https://raw.githubusercontent.com/TVDOfficial/Project_CHIMERA/main/assets/logo.png",
-      "altText_example": "Project CHIMERA Logo",
-      "linkUrl_example": "https://github.com/TVDOfficial/Project_CHIMERA/"
+        {
+            "_comment_general": "This file configures the 'Updates Widget'...",
+            "widgetType": "htmlContent",
+      
+            "widgetConfig": {
+              "_comment_htmlContent": "Use to inject raw HTML...",
+              "html": "<div style='padding: 10px; text-align: center;'> <p style='font-size: 1.1em; margin-bottom: 15px;'>ð¶ Check out my most popular songs! ð¤</p> <iframe style='border-radius:12px; display: block; margin: 0 auto;' src='https://open.spotify.com/embed/playlist/0qbWRUJ04cKpPUS41qDde0?utm_source=generator' width='90%' height='352' frameBorder='0' allowfullscreen='' allow='autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture' loading='lazy'></iframe></div>"
+            }
+          }
     }
   }

@@ -14,15 +14,16 @@ export const ALL_WIDGET_DEFINITIONS_METADATA = {
     quickLinksWidget: { id: 'quickLinksWidget', name: 'Nav Matrix', icon: 'fa-route', defaultOrder: 6, defaultVisible: true, minW: 280, minH: 90 },
     chimeraAIChatWidget: {id: 'chimeraAIChatWidget', name: 'CHIMERA AI Chat', icon: 'fa-robot', defaultOrder: 7, defaultVisible: true, minW: 320, minH: 400, configurableSettings: ['openaiApiKey', 'aiChatTTSEnabled']},
     stocksWidget: { id: 'stocksWidget', name: 'Market Watch', icon: 'fa-chart-line', defaultOrder: 8, defaultVisible: true, minW: 300, minH: 400, configurableSettings: ['stocksTrackList'] },
+    updatesWidget: { id: 'updatesWidget', name: 'Dynamic Updates', icon: 'fa-bullhorn', defaultOrder: 9, defaultVisible: true, minW: 280, minH: 150 },
     
     // Other widgets, defaultVisible: false
-    systemWidget: { id: 'systemWidget', name: 'System Core', icon: 'fa-server', defaultOrder: 9, defaultVisible: false, minW: 220, minH: 140 },
-    tasksWidget: { id: 'tasksWidget', name: 'Directives', icon: 'fa-clipboard-list', defaultOrder: 10, defaultVisible: false, minW: 260, minH: 220 },
-    notesWidget: { id: 'notesWidget', name: 'Captain\'s Log', icon: 'fa-book', defaultOrder: 11, defaultVisible: false, minW: 220, minH: 130 },
-    nexusVisualizerWidget: {id: 'nexusVisualizerWidget', name: 'Nexus Visualizer', icon: 'fa-atom', defaultOrder: 12, defaultVisible: false, minW: 260, minH: 300 },
-    snakeGameWidget: {id: 'snakeGameWidget', name: 'Retro Snake', icon: 'fa-gamepad', defaultOrder: 13, defaultVisible: false, minW: 280, minH: 300},
-    connectionMonitorWidget: {id: 'connectionMonitorWidget', name: 'Connection Monitor', icon: 'fa-network-wired', defaultOrder: 14, defaultVisible: false, minW: 240, minH: 130},
-    latinProverbsWidget: { id: 'latinProverbsWidget', name: 'Latin Proverb', icon: 'fa-scroll', defaultOrder: 15, defaultVisible: false, minW: 250, minH: 120 }
+    systemWidget: { id: 'systemWidget', name: 'System Core', icon: 'fa-server', defaultOrder: 10, defaultVisible: false, minW: 220, minH: 140 },
+    tasksWidget: { id: 'tasksWidget', name: 'Directives', icon: 'fa-clipboard-list', defaultOrder: 11, defaultVisible: false, minW: 260, minH: 220 },
+    notesWidget: { id: 'notesWidget', name: 'Captain\'s Log', icon: 'fa-book', defaultOrder: 12, defaultVisible: false, minW: 220, minH: 130 },
+    nexusVisualizerWidget: {id: 'nexusVisualizerWidget', name: 'Nexus Visualizer', icon: 'fa-atom', defaultOrder: 13, defaultVisible: false, minW: 260, minH: 300 },
+    snakeGameWidget: {id: 'snakeGameWidget', name: 'Retro Snake', icon: 'fa-gamepad', defaultOrder: 14, defaultVisible: false, minW: 280, minH: 300},
+    connectionMonitorWidget: {id: 'connectionMonitorWidget', name: 'Connection Monitor', icon: 'fa-network-wired', defaultOrder: 15, defaultVisible: false, minW: 240, minH: 130},
+    latinProverbsWidget: { id: 'latinProverbsWidget', name: 'Latin Proverb', icon: 'fa-scroll', defaultOrder: 16, defaultVisible: false, minW: 250, minH: 120 }
 };
 
 export const OWM_ICON_MAP = {
