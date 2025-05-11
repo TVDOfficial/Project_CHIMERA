@@ -1,19 +1,26 @@
 {
     "_comment_general": "This file configures the 'Updates Widget' on your dashboard. You can change the widgetType and widgetConfig to display different kinds of content.",
     "_comment_widgetType": "Defines the type of widget to display. Supported types: 'announcement', 'spotifyEmbed', 'htmlContent', 'image'.",
-    "_comment_widgetConfig": "Configuration specific to the chosen widgetType.",
+    "_comment_widgetConfig": "Configuration specific to the chosen widgetType. The active configuration uses plain keys (e.g., 'html'). Examples for other types use an '_example' suffix (e.g., 'title_announcement_example').",
   
-    "widgetType": "announcement",
+    "widgetType": "htmlContent",
   
     "widgetConfig": {
-        {
-            "_comment_general": "This file configures the 'Updates Widget'...",
-            "widgetType": "htmlContent",
-      
-            "widgetConfig": {
-              "_comment_htmlContent": "Use to inject raw HTML...",
-              "html": "<div style='padding: 10px; text-align: center;'> <p style='font-size: 1.1em; margin-bottom: 15px;'>ð¶ Check out my most popular songs! ð¤</p> <iframe style='border-radius:12px; display: block; margin: 0 auto;' src='https://open.spotify.com/embed/playlist/0qbWRUJ04cKpPUS41qDde0?utm_source=generator' width='90%' height='352' frameBorder='0' allowfullscreen='' allow='autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture' loading='lazy'></iframe></div>"
-            }
-          }
+      "html": "<div style='padding: 10px; text-align: center;'> <p style='font-size: 1.1em; margin-bottom: 15px;'>🎉 Check out my most popular songs! 🎶</p> <iframe style='border-radius:12px; display: block; margin: 0 auto;' src='https://open.spotify.com/embed/playlist/0qbWRUJ04cKpPUS41qDde0?utm_source=generator' width='90%' height='352' frameBorder='0' allowfullscreen='' allow='autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture' loading='lazy'></iframe></div>",
+  
+      "_comment_announcement": "EXAMPLE for widgetType 'announcement': Use for simple text. 'title' is optional.",
+      "title_announcement_example": "🎉 Welcome to the Dynamic Updates Widget!",
+      "message_announcement_example": "This content is loaded from the updates.json file on GitHub. Edit this file to change what's displayed here. You can try setting widgetType to 'spotifyEmbed' (and provide an embedUrl), 'htmlContent' (and provide an html string), or 'image' (and provide an imageUrl).",
+  
+      "_comment_spotifyEmbed": "EXAMPLE for widgetType 'spotifyEmbed': Use to embed a Spotify player. Get the embed URL from Spotify (Share > Embed track/playlist/album > copy the src value from the iframe).",
+      "embedUrl_spotify_example": "https://open.spotify.com/embed/playlist/37i9dQZF1DXcBWIGoYBM5M?utm_source=generator",
+  
+      "_comment_htmlContent_example": "EXAMPLE for widgetType 'htmlContent' (if you want a different HTML example than the active one): Use to inject raw HTML. Be careful with this.",
+      "html_example": "<div style='padding:10px; background-color:#282c34; color: #61dafb; border-radius:5px;'><h3 style='margin-top:0;'>Custom HTML Content!</h3><p>This is <strong>bold</strong> and this is <em>italic</em>.</p><button onclick='alert(\"HTML button clicked!\")'>Click me</button></div>",
+  
+      "_comment_image": "EXAMPLE for widgetType 'image': Use to display an image. 'altText' and 'linkUrl' (to make the image clickable) are optional.",
+      "imageUrl_example": "https://raw.githubusercontent.com/TVDOfficial/Project_CHIMERA/main/assets/logo.png",
+      "altText_example": "Project CHIMERA Logo",
+      "linkUrl_example": "https://github.com/TVDOfficial/Project_CHIMERA/"
     }
   }
