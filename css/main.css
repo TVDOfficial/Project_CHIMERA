@@ -249,15 +249,19 @@ body {
 
 /* --- Dashboard --- */
 .dashboard-grid {
-    display: none;
-    grid-template-columns: 3fr 4fr 3fr 3fr 3fr;
-    gap: 8px;
-    padding: 5px;
-    width: 100%; height: 100%;
-    opacity: 0;
-    transition: opacity 0.5s ease-out;
-    position: relative;
+    display: grid;
+    /* When not in freeform mode, use 4 columns */
+    grid-template-columns: repeat(3, 1fr); /* Default for when class might be used elsewhere without grid mode context */
+    gap: 10px;
+    padding: 10px;
+    height: calc(100% - 20px); /* Adjust if you have a header/footer inside dashboardGrid's parent */
+    overflow-y: auto;
 }
+
+.dashboard-grid:not(.freeform) {
+    grid-template-columns: repeat(4, 1fr); /* 4 columns for actual grid mode */
+}
+
 .dashboard-grid.visible {
     display: grid;
     opacity: 1;

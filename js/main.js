@@ -43,6 +43,9 @@ const closeWidgetLibraryBtn = document.getElementById('closeWidgetLibraryBtn');
 const widgetLibraryContainer = document.getElementById('widgetLibraryContainer');
 
 const settingsResetLayoutBtn = document.getElementById('settingsResetLayoutBtn');
+const saveLayoutToFileBtn = document.getElementById('saveLayoutToFileBtn');
+const loadLayoutFromFileBtn = document.getElementById('loadLayoutFromFileBtn');
+const loadLayoutFileInput = document.getElementById('loadLayoutFileInput');
 
 const settingsModal = document.getElementById('settingsModal');
 const closeSettingsModalBtn = document.getElementById('closeSettingsModalBtn');
@@ -175,7 +178,10 @@ function setupGlobalEventListeners() {
     if (openWidgetLibraryBtn) openWidgetLibraryBtn.addEventListener('click', openWidgetLibrary);
     if (closeWidgetLibraryBtn) closeWidgetLibraryBtn.addEventListener('click', closeWidgetLibrary);
 
-    if (settingsResetLayoutBtn) settingsResetLayoutBtn.addEventListener('click', handleResetLayout);
+    if (settingsResetLayoutBtn) settingsResetLayoutBtn.addEventListener('click', handleFactoryResetSettings);
+    if (saveLayoutToFileBtn) saveLayoutToFileBtn.addEventListener('click', handleSaveLayoutToFile);
+    if (loadLayoutFromFileBtn) loadLayoutFromFileBtn.addEventListener('click', () => loadLayoutFileInput && loadLayoutFileInput.click());
+    if (loadLayoutFileInput) loadLayoutFileInput.addEventListener('change', handleLoadLayoutFromFile);
 
     if (infoButton) infoButton.addEventListener('click', openInfoModal);
     if (closeInfoModalBtn) closeInfoModalBtn.addEventListener('click', closeInfoModal);
@@ -274,7 +280,7 @@ function handleWindowResize() {
 
 function getDefaultWidgetConfig() {
     const defaultConfig = {};
-    Object.entries(ALL_WIDGET_DEFINITIONS).forEach(([key, def]) => { // Use the mapped ALL_WIDGET_DEFINITIONS
+    Object.entries(ALL_WIDGET_DEFINITIONS).forEach(([key, def]) => {
         defaultConfig[key] = {
             id: def.id, name: def.name, icon: def.icon,
             visible: def.defaultVisible,
@@ -293,14 +299,31 @@ function getDefaultWidgetConfig() {
         };
     });
 
-    if (defaultConfig.weatherWidget) Object.assign(defaultConfig.weatherWidget, { x: '20px', y: '20px', width: '250px', height: '140px' });
-    if (defaultConfig.timeWidget) Object.assign(defaultConfig.timeWidget, { x: 'calc(50% - 190px)', y: '20px', width: '380px', height: '100px' });
-    if (defaultConfig.calendarWidget) Object.assign(defaultConfig.calendarWidget, { x: 'calc(100% - 280px - 20px)', y: '20px', width: '280px', height: '280px' });
-    if (defaultConfig.spotifyWidget) Object.assign(defaultConfig.spotifyWidget, { x: 'calc(50% - 190px)', y: '140px', width: '380px', height: '160px' }); // Updated position
-    if (defaultConfig.youtubeWidget) Object.assign(defaultConfig.youtubeWidget, { x: 'calc(50% - 240px)', y: '320px', width: '480px', height: '360px' }); // Centered below spotify
-    if (defaultConfig.rssFeedWidget) Object.assign(defaultConfig.rssFeedWidget, { x: 'calc(100% - 300px - 20px)', y: '320px', width: '300px', height: '380px' });
-    if (defaultConfig.quickLinksWidget) Object.assign(defaultConfig.quickLinksWidget, { x: '20px', y: 'calc(100% - 90px - 20px)', width: '280px', height: '90px' });
-    if (defaultConfig.chimeraAIChatWidget) Object.assign(defaultConfig.chimeraAIChatWidget, { x: '20px', y: '180px', width: '320px', height: 'calc(100% - 90px - 20px - 180px - 20px)' }); // Fill space
+    // Default positions and sizes for freeform layout
+    // Top Row
+    if (defaultConfig.weatherWidget) Object.assign(defaultConfig.weatherWidget, { x: '20px', y: '20px', width: '320px', height: '240px' });
+    if (defaultConfig.timeWidget) Object.assign(defaultConfig.timeWidget, { x: 'calc(50% - 220px)', y: '20px', width: '440px', height: '140px' }); // Clock Display (Top-Center, Bigger height, slightly wider)
+    // Dynamic Updates: Positioned between Time and Calendar roughly
+    // Time ends around calc(50% - 220px + 440px) = calc(50% + 220px)
+    // Calendar starts at calc(100% - 280px - 20px)
+    // Let's place Updates starting after Time, e.g., calc(50% + 220px + 20px) = calc(50% + 240px)
+    // Moving it further right: Change 240px to 270px
+    if (defaultConfig.updatesWidget) Object.assign(defaultConfig.updatesWidget, { x: 'calc(50% + 15%)', y: '20px', width: '380px', height: '220px' }); // Dynamic Updates (Shifted right, Taller)
+
+    // Second Row
+    if (defaultConfig.chimeraAIChatWidget) Object.assign(defaultConfig.chimeraAIChatWidget, { x: '20px', y: 'calc(50% - 200px)', width: '300px', height: '250px' }); // AI Chat (minH is now 200 from config)
+    if (defaultConfig.spotifyWidget) Object.assign(defaultConfig.spotifyWidget, { x: 'calc(50% - 200px)', y: '170px', width: '400px', height: '190px' }); // Audio Relay (Adjusted y slightly)
+    if (defaultConfig.calendarWidget) Object.assign(defaultConfig.calendarWidget, { x: 'calc(100% - 280px - 20px)', y: '20px', width: '280px', height: '280px' }); // Chronometer (Top-Right, y=20px to align with updates and time if possible)
+
+    // Third Row / Main Content Area
+    if (defaultConfig.youtubeWidget) Object.assign(defaultConfig.youtubeWidget, { x: 'calc(50% - 400px)', y: '470px', width: '800px', height: '550px' }); // Media Stream (Adjusted y)
+    if (defaultConfig.rssFeedWidget) Object.assign(defaultConfig.rssFeedWidget, { x: 'calc(100% - 300px - 20px)', y: '320px', width: '300px', height: '380px' }); // Newsfeed position adjusted based on new Updates/Calendar y
+
+    // Bottom Row / Anchored
+    if (defaultConfig.quickLinksWidget) Object.assign(defaultConfig.quickLinksWidget, { x: '20px', y: 'calc(100% - 140px - 20px)', width: '300px', height: '140px' }); // Nav Matrix (Bottom-Left, Taller)
+    // Stocks widget position needs to consider the new Calendar y and Newsfeed y
+    // Calendar ends at 20px + 280px = 300px. Newsfeed starts at 320px, ends at 320px + 380px = 700px
+    if (defaultConfig.stocksWidget) Object.assign(defaultConfig.stocksWidget, { x: 'calc(100% - 300px - 20px)', y: 'calc(320px + 380px + 20px)', width: '300px', height: 'calc(100% - (320px + 380px + 20px) - 20px)' }); // Market Watch (Fill remaining space at bottom right)
 
     return defaultConfig;
 }
@@ -416,20 +439,43 @@ function handleSaveSettings() {
     renderDashboardWidgets();
 }
 
-function handleResetLayout() {
-    if (confirm("Are you sure you want to reset the dashboard to its default layout and widget visibility? This cannot be undone.")) {
+function handleFactoryResetSettings() {
+    if (confirm("Are you sure you want to reset ALL settings and the dashboard layout to defaults? This includes clearing API keys and other configurations. This cannot be undone.")) {
         widgetsConfig = getDefaultWidgetConfig();
-        settings.layoutMode = 'freeform';
-        layoutModeRadios.forEach(radio => radio.checked = (radio.value === 'freeform'));
+
+        // Reset all relevant settings to their factory defaults
+        settings.theme = 'chimera-dark';
         settings.backgroundParticles = true;
-        if(backgroundParticlesToggle) backgroundParticlesToggle.checked = true;
+        settings.layoutMode = 'freeform';
         settings.aiChatTTSEnabled = true;
-        if(aiChatTTSToggle) aiChatTTSToggle.checked = true;
+
+        settings.weatherApiKey = '';
+        settings.weatherLocation = '';
+        settings.weatherUnit = 'metric';
+        settings.youtubeApiKey = '';
+        settings.openaiApiKey = '';
+        settings.rssFeedUrl = 'https://feeds.bbci.co.uk/news/world/rss.xml';
+        settings.rssItemCount = 5;
+        settings.stocksTrackList = 'NASDAQ:AAPL,Apple Inc.\nBINANCE:BTCUSDT,Bitcoin';
+
+        // Update UI elements in the settings modal
+        if (themeSelector) themeSelector.value = settings.theme;
+        if (backgroundParticlesToggle) backgroundParticlesToggle.checked = settings.backgroundParticles;
+        layoutModeRadios.forEach(radio => radio.checked = (radio.value === settings.layoutMode));
+        if (aiChatTTSToggle) aiChatTTSToggle.checked = settings.aiChatTTSEnabled;
+        if (weatherApiKeyInput) weatherApiKeyInput.value = settings.weatherApiKey;
+        if (weatherLocationInput) weatherLocationInput.value = settings.weatherLocation;
+        weatherUnitRadios.forEach(radio => radio.checked = (radio.value === settings.weatherUnit));
+        if (youtubeApiKeyInput) youtubeApiKeyInput.value = settings.youtubeApiKey;
+        if (openaiApiKeyInput) openaiApiKeyInput.value = settings.openaiApiKey;
+        if (rssFeedUrlInput) rssFeedUrlInput.value = settings.rssFeedUrl;
+        if (rssItemCountInput) rssItemCountInput.value = settings.rssItemCount;
+        if (stocksTrackListInput) stocksTrackListInput.value = settings.stocksTrackList;
 
         saveAppSettings();
-        initBackgroundParticles();
+        applyTheme(settings.theme);
         renderDashboardWidgets();
-        showToast('Layout reset to default.');
+        showToast('All settings and layout reset to default.');
     }
 }
 
@@ -455,12 +501,15 @@ function renderDashboardWidgets() {
 
     if (settings.layoutMode === 'grid') {
         dashboardGrid.classList.remove('freeform');
-        const columns = [ document.createElement('div'), document.createElement('div'), document.createElement('div') ];
-        columns.forEach((col, i) => col.className = `dashboard-column ${['left', 'main', 'right'][i]}-column`);
+        const columns = [ document.createElement('div'), document.createElement('div'), document.createElement('div'), document.createElement('div') ];
+        columns.forEach((col, i) => col.className = `dashboard-column col-${i}`);
         columns.forEach(col => dashboardGrid.appendChild(col));
-        const widgetsByColumn = [[], [], []];
+        const widgetsByColumn = [[], [], [], []];
         Object.values(widgetsConfig).filter(c => c.visible)
-              .forEach(c => widgetsByColumn[c.col >=0 && c.col <=2 ? c.col : 0].push(c));
+              .forEach(c => {
+                  const colIndex = (c.col >= 0 && c.col <= 3) ? c.col : 0;
+                  widgetsByColumn[colIndex].push(c);
+              });
         widgetsByColumn.forEach((colWidgets, colIndex) => {
             colWidgets.sort((a, b) => (a.order || 0) - (b.order || 0)).forEach(conf => {
                 const el = createWidgetElement(conf);
@@ -486,6 +535,24 @@ function renderDashboardWidgets() {
                         } catch (e) { console.error(`Init error ${conf.id}:`, e); }
                     }
                 }
+            });
+            // Add drop zone event listeners to the column div
+            columns[colIndex].addEventListener('dragover', (event) => {
+                event.preventDefault(); // Allow drop
+                event.dataTransfer.dropEffect = 'move';
+                // Optional: Add styling for drop target indication
+                // columns[colIndex].classList.add('drag-over-column'); 
+            });
+            // Optional: Remove styling on dragleave
+            // columns[colIndex].addEventListener('dragleave', () => {
+            //     columns[colIndex].classList.remove('drag-over-column');
+            // });
+            columns[colIndex].addEventListener('drop', (event) => {
+                event.preventDefault();
+                // columns[colIndex].classList.remove('drag-over-column');
+                const widgetId = event.dataTransfer.getData('text/plain');
+                const targetColumnIndex = colIndex; 
+                handleWidgetDropInColumn(widgetId, targetColumnIndex, event); // Pass event for potential y-position check for ordering
             });
         });
     } else {
@@ -525,6 +592,21 @@ function renderDashboardWidgets() {
 function createWidgetElement(widgetConfig) {
     const def = ALL_WIDGET_DEFINITIONS[widgetConfig.id]; if (!def) return null;
     const el = document.createElement('article'); el.className = `widget ${def.id}-chimera`; el.id = def.id; el.dataset.widgetKey = def.id;
+
+    // Make widget draggable in grid mode
+    if (settings.layoutMode === 'grid') {
+        el.draggable = true;
+        el.addEventListener('dragstart', (event) => {
+            event.dataTransfer.setData('text/plain', def.id);
+            event.dataTransfer.effectAllowed = 'move';
+            // Optional: Add a class for styling the dragged element
+            // event.target.classList.add('dragging-widget'); 
+        });
+        // Optional: Clear dragging style on dragend
+        // el.addEventListener('dragend', (event) => {
+        //     event.target.classList.remove('dragging-widget');
+        // });
+    }
 
     let showRefresh = !['timeWidget', 'quickLinksWidget', 'calendarWidget'].includes(def.id);
     if (['nexusVisualizerWidget', 'snakeGameWidget', 'connectionMonitorWidget', 'rssFeedWidget', 'weatherWidget', 'systemWidget', 'spotifyWidget', 'youtubeWidget', 'chimeraAIChatWidget', 'latinProverbsWidget', 'stocksWidget', 'updatesWidget'].includes(def.id)) showRefresh = true; // latinProverbsWidget can be refreshed, stocksWidget uses TradingView (less need for manual refresh)
@@ -742,7 +824,7 @@ function setupContextMenu() {
                 case 'open-settings-context': openSettingsModal(); break;
                 case 'open-widget-library-context': openWidgetLibrary(); break;
                 case 'toggle-layout-mode-context': handleToggleLayoutMode(); break;
-                case 'reset-layout-context': handleResetLayout(); break;
+                case 'reset-layout-context': handleContextMenuResetLayout(); break;
                 case 'open-info-context': openInfoModal(); break;
             }
             customContextMenu.style.display = 'none';
@@ -910,6 +992,150 @@ function handleSaveWidgetSpecificSettings() {
     // Re-render all widgets to apply changes. 
     // A more optimized approach would be to re-render only the specific widget (currentEditingWidgetKey)
     // but that requires more intricate handling of widget re-initialization.
+    renderDashboardWidgets(); 
+}
+
+// New Function: Save Layout to File
+function handleSaveLayoutToFile() {
+    try {
+        const layoutToSave = JSON.stringify(widgetsConfig, null, 2);
+        const blob = new Blob([layoutToSave], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        const timestamp = new Date().toISOString().slice(0, 19).replace(/[-:T]/g, '');
+        a.download = `chimera_layout_${timestamp}.json`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        showToast('Layout saved to file successfully!');
+    } catch (error) {
+        console.error("Error saving layout to file:", error);
+        showToast('Error saving layout. Check console.', 5000);
+    }
+}
+
+// New Function: Load Layout from File
+function handleLoadLayoutFromFile(event) {
+    const file = event.target.files[0];
+    if (!file) {
+        return;
+    }
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        try {
+            const loadedConfig = JSON.parse(e.target.result);
+            // Basic validation - check if it's an object
+            if (typeof loadedConfig !== 'object' || loadedConfig === null) {
+                throw new Error("Invalid file format. Expected a JSON object.");
+            }
+
+            // More robust merging: ensure all defined widgets are present, update existing, keep defaults for new
+            const currentWidgetKeys = Object.keys(ALL_WIDGET_DEFINITIONS);
+            const newWidgetsConfig = { ...widgetsConfig }; // Start with a copy of current or default config
+
+            for (const key of currentWidgetKeys) {
+                if (loadedConfig[key]) {
+                    // If widget exists in loaded config, update it, but ensure core properties are not lost
+                    newWidgetsConfig[key] = {
+                        ...(ALL_WIDGET_DEFINITIONS[key] ? getDefaultWidgetConfig()[key] : {}), // Base defaults for this widget type
+                        ...newWidgetsConfig[key], // Values from current running config
+                        ...loadedConfig[key] // Override with loaded values
+                    };
+                    // Ensure essential fields like id and visibility are correctly typed or defaulted
+                    newWidgetsConfig[key].id = ALL_WIDGET_DEFINITIONS[key]?.id || key;
+                    if (typeof newWidgetsConfig[key].visible !== 'boolean') {
+                        newWidgetsConfig[key].visible = ALL_WIDGET_DEFINITIONS[key]?.defaultVisible || false;
+                    }
+                } else if (!newWidgetsConfig[key] && ALL_WIDGET_DEFINITIONS[key]) {
+                    // Widget defined in app but not in loaded file, ensure it gets its default config
+                    newWidgetsConfig[key] = getDefaultWidgetConfig()[key];
+                }
+            }
+             // Prune any widgets from loadedConfig that are no longer in ALL_WIDGET_DEFINITIONS
+            for (const key in newWidgetsConfig) {
+                if (!ALL_WIDGET_DEFINITIONS[key]) {
+                    delete newWidgetsConfig[key];
+                }
+            }
+
+            widgetsConfig = newWidgetsConfig;
+            saveAppSettings();
+            renderDashboardWidgets();
+            showToast('Layout loaded successfully!');
+        } catch (error) {
+            console.error("Error loading layout from file:", error);
+            showToast(`Error loading layout: ${error.message}`, 5000);
+        } finally {
+            loadLayoutFileInput.value = ''; // Reset file input
+        }
+    };
+    reader.onerror = function() {
+        showToast('Error reading file.', 5000);
+        loadLayoutFileInput.value = ''; // Reset file input
+    };
+    reader.readAsText(file);
+}
+
+// New function for Context Menu Reset (Layout Only)
+function handleContextMenuResetLayout() {
+    if (confirm("Are you sure you want to reset the dashboard layout to its default widget positions, sizes, and visibility? Your API keys and other configurations will NOT be changed.")) {
+        widgetsConfig = getDefaultWidgetConfig(); // Only reset widget configurations
+        // Note: We are NOT resetting the main 'settings' object here.
+
+        saveAppSettings();
+        renderDashboardWidgets();
+        showToast('Dashboard layout reset to default.');
+    }
+}
+
+// New function to handle widget drop in grid mode
+function handleWidgetDropInColumn(widgetId, targetColumnIndex, dropEvent) {
+    if (!widgetsConfig[widgetId]) return;
+
+    const oldColumnIndex = widgetsConfig[widgetId].col;
+    const oldOrder = widgetsConfig[widgetId].order;
+
+    // Update column
+    widgetsConfig[widgetId].col = targetColumnIndex;
+
+    // Reorder widgets: Simple append to new column, then re-evaluate order for all in that column
+    // Remove from old position (conceptually, re-render will do this)
+    // Add to new position and determine order
+
+    // A simple re-ordering strategy: place it at an order value that ensures it's last in the new column for now.
+    // More sophisticated logic would involve checking dropEvent.clientY relative to other widgets in the column.
+    const widgetsInTargetColumn = Object.values(widgetsConfig).filter(w => w.visible && w.col === targetColumnIndex && w.id !== widgetId);
+    widgetsConfig[widgetId].order = widgetsInTargetColumn.length; // Assign as last item
+
+    // Normalize order for all widgets in the target column after the move
+    let orderCounter = 0;
+    Object.values(widgetsConfig)
+        .filter(w => w.visible && w.col === targetColumnIndex)
+        .sort((a, b) => (a.id === widgetId ? Infinity : a.order) - (b.id === widgetId ? Infinity : b.order)) // Tentatively place dropped item last
+        .forEach(w => {
+            if (w.id === widgetId) { // Assign its final order based on this re-sort
+                widgetsConfig[widgetId].order = orderCounter++;
+            } else if (w.order !== orderCounter) { // If other widgets order changed due to a shift
+                 widgetsConfig[w.id].order = orderCounter++;
+            }
+            // If its the dropped widget and it's been placed, or its order is already correct.
+        });
+     // Normalize order for the source column if the widget moved from a different column
+    if (oldColumnIndex !== targetColumnIndex) {
+        orderCounter = 0;
+        Object.values(widgetsConfig)
+            .filter(w => w.visible && w.col === oldColumnIndex)
+            .sort((a,b) => a.order - b.order)
+            .forEach(w => {
+                widgetsConfig[w.id].order = orderCounter++;
+            });
+    }
+
+
+    showToast(`${ALL_WIDGET_DEFINITIONS[widgetId].name} moved to column ${targetColumnIndex + 1}`);
+    saveAppSettings();
     renderDashboardWidgets(); 
 }
 
