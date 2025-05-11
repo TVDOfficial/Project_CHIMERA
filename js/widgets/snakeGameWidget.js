@@ -33,17 +33,19 @@ export function setupSnakeGameWidget(widgetEl, conf) {
     function initGameLogic() {
         if (gameLoopInterval) clearInterval(gameLoopInterval);
         snake = [{ x: Math.floor(tileCountX / 2), y: Math.floor(tileCountY / 2) }];
-        dx = 0; dy = 0;
+        dx = 0; dy = 0; // Snake starts stationary
         score = 0; if (scoreValEl) scoreValEl.textContent = score;
         if (gameOverMsgEl) gameOverMsgEl.style.display = 'none';
         placeFood(); gameActive = true;
-        gameLoopInterval = null;
-        widgetEl.dataset.snakeGameInterval = null;
+
+        // Start the game loop immediately
+        gameLoopInterval = setInterval(gameLoop, 150);
+        widgetEl.dataset.snakeGameInterval = String(gameLoopInterval); // Store interval ID
+
         if (widgetEl.snakeKeydownHandler) document.removeEventListener('keydown', widgetEl.snakeKeydownHandler);
         widgetEl.snakeKeydownHandler = handleKeyPress; document.addEventListener('keydown', widgetEl.snakeKeydownHandler);
-        drawGame();
-    }
-    function placeFood() { food = { x: Math.floor(Math.random() * tileCountX), y: Math.floor(Math.random() * tileCountY) }; for (let p of snake) if (p.x === food.x && p.y === food.y) { placeFood(); return; } }
+        drawGame(); // Draw the initial state of the game
+    }    function placeFood() { food = { x: Math.floor(Math.random() * tileCountX), y: Math.floor(Math.random() * tileCountY) }; for (let p of snake) if (p.x === food.x && p.y === food.y) { placeFood(); return; } }
 
     function gameLoop() {
         if (!gameActive) return;
@@ -71,7 +73,7 @@ export function setupSnakeGameWidget(widgetEl, conf) {
     }
     function drawGame() {
         if (!ctx || !canvas || !food) return;
-        ctx.fillStyle = getComputedStyle(canvas).backgroundColor || 'rgba(var(--current-bg-deep-r),var(--current-bg-deep-g),var(--current-bg-deep-b),0.5)';
+        ctx.fillStyle = '#000000';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
         ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--current-accent-tertiary').trim();
         ctx.fillRect(food.x * gridSize + 1, food.y * gridSize + 1, gridSize -2 , gridSize -2 );
@@ -107,16 +109,14 @@ export function setupSnakeGameWidget(widgetEl, conf) {
             default: return;
         }
 
+        // Prevent the snake from reversing onto itself
         if (snake.length > 1 && newDx === -dx && newDy === -dy ) {
+            // If trying to reverse, do nothing (keep current dx, dy)
         } else {
             dx = newDx; dy = newDy;
         }
 
-         if ((dx !== 0 || dy !== 0) && !widgetEl.dataset.snakeGameInterval && gameActive) {
-            if(gameLoopInterval) clearInterval(gameLoopInterval);
-            gameLoopInterval = setInterval(gameLoop, 150);
-            widgetEl.dataset.snakeGameInterval = gameLoopInterval;
-        }
+        // The game loop is now started in initGameLogic, so the block that was here is removed.
     }
     resizeAndInit();
     const refreshBtn = widgetEl.querySelector(`[data-action="refresh-${conf.id}"]`); if (refreshBtn) { refreshBtn.title = "Restart Game"; refreshBtn.addEventListener('click', resizeAndInit); }
