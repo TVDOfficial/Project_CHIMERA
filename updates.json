@@ -6,7 +6,7 @@
     "widgetType": "htmlContent",
   
     "widgetConfig": {
-      "html": "<div style='padding: 10px; text-align: center;'> <p style='font-size: 1.1em; margin-bottom: 15px;'>🎉 Check out my most popular songs! 🎶</p> <iframe style='border-radius:12px; display: block; margin: 0 auto;' src='https://open.spotify.com/embed/playlist/0qbWRUJ04cKpPUS41qDde0?utm_source=generator' width='90%' height='352' frameBorder='0' allowfullscreen='' allow='autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture' loading='lazy'></iframe></div>",
+      "html": "<div style='padding: 10px; text-align: center;'> <p style='font-size: 1.1em; margin-bottom: 15px;'>🎉 Check out my most popular songs! 🎶</p> <iframe style='border-radius:12px; display: block; margin: 0 auto;' src='https://open.spotify.com/embed/playlist/0qbWRUJ04cKpPUS41qDde0?utm_source=generator' width='90%' height='352' frameBorder='0' allowfullscreen='' allow='autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture' loading='lazy'></iframe>",
   
       "_comment_announcement": "EXAMPLE for widgetType 'announcement': Use for simple text. 'title' is optional.",
       "title_announcement_example": "🎉 Welcome to the Dynamic Updates Widget!",
